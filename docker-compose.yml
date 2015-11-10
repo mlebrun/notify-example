@@ -1,0 +1,28 @@
+web:
+  build: .
+  links:
+   - redis
+  ports:
+   - "8080"
+  volumes:
+   - ./:/usr/src/app
+  environment:
+    CFG_LOG_USER: www-data
+    CFG_LOG_GROUP: www-data
+    CFG_APP_DEBUG: 1
+    CFG_APP_PARTITIONS: 1
+    CFG_ADMIN_EMAIL: email@local.dev
+    CFG_SERVER_ROLE: web,cloud
+    CFG_REDIS_HOST: redis
+    CFG_REDIS_PORT: 6379
+    CFG_PRIMUS_PORT: 8080
+    CFG_PRIMUS_TRANSFORMER: engine.io
+
+#=======================================================
+# Redis
+#=======================================================
+
+redis:
+  image: redis
+  ports:
+      - "6379"
