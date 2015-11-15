@@ -15,6 +15,9 @@ primus = new Primus(server, { transformer: config.CFG_PRIMUS_TRANSFORMER });
 subscriber = new RedisSubscriber({ redis: { port: config.CFG_REDIS_PORT, host: config.CFG_REDIS_HOST } });
 application = new Application(primus, subscriber);
 
+// save latest client library
+primus.save(__dirname +'/client.js');
+
 subscriber.connect();
 
 server.listen(config.CFG_PRIMUS_PORT, function() {
