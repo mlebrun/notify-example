@@ -3,12 +3,13 @@ web:
   links:
    - redis
   ports:
-   - "8080"
+   - "8080:8080"
   volumes:
    - ./:/usr/src/app
   environment:
     CFG_LOG_USER: www-data
     CFG_LOG_GROUP: www-data
+    CFG_LOG_LEVEL: debug
     CFG_APP_DEBUG: 1
     CFG_APP_PARTITIONS: 1
     CFG_ADMIN_EMAIL: email@local.dev
@@ -16,6 +17,8 @@ web:
     CFG_REDIS_HOST: redis
     CFG_REDIS_PORT: 6379
     CFG_PRIMUS_PORT: 8080
+    CFG_PRIMUS_PATH_KEY: dev.key
+    CFG_PRIMUS_PATH_CERT: dev.crt
     CFG_PRIMUS_TRANSFORMER: engine.io
 
 #=======================================================
@@ -25,4 +28,4 @@ web:
 redis:
   image: redis
   ports:
-      - "6379"
+      - "6379:6379"

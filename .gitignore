@@ -1,4 +1,8 @@
+test.js
+dev.key
+dev.crt
 dist
 node_modules
 npm-debug.log
+error.log
 .DS_Store
