@@ -37,6 +37,10 @@ process.on('SIGTERM', function () {
   });
 });
 
-server.listen(config.CFG_PRIMUS_PORT, function() {
-  logger.info('[ Primus Listening ] ' + config.CFG_PRIMUS_PORT);
+subscriber.connect();
+subscriber.on('connected', function() {
+  server.listen(config.CFG_PRIMUS_PORT, function() {
+    logger.info('[ Primus Listening ] ' + config.CFG_PRIMUS_PORT);
+  });
 });
+
