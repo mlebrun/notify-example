@@ -19,7 +19,7 @@ server = https.createServer({
 
 primus = new Primus(server, {
   transformer: config.CFG_PRIMUS_TRANSFORMER,
-  origins: 'https://net.dev.be.lan'
+  origins: config.CFG_PRIMUS_ORIGINS
 });
 
 subscriber = new RedisSubscriber({
@@ -35,6 +35,11 @@ process.on('SIGTERM', function () {
   server.close(function () {
     process.exit(0);
   });
+});
+
+primus.on('close', function(spark) {
+  // should clean up your subscriber
+  subscriber.quit();
 });
 
 subscriber.connect();

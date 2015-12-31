@@ -20,6 +20,7 @@ web:
     CFG_PRIMUS_PATH_KEY: dev.key
     CFG_PRIMUS_PATH_CERT: dev.crt
     CFG_PRIMUS_TRANSFORMER: engine.io
+    CFG_PRIMUS_ORIGINS: https://net.dev.be.lan
 
 #=======================================================
 # Redis
