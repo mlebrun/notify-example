@@ -3,9 +3,10 @@ var fs = require('fs'),
     https = require('https'),
     express = require('express'),
     Primus = require('primus'),
+    Emit = require('primus-emit'),
     Rooms = require('primus-rooms'),
+    Notify = require('notify'),
     RedisSubscriber = require('./lib/subscribers/RedisSubscriber'),
-    Application = require('./lib/Application'),
     logger = require(__dirname + '/lib/logger'),
     config = process.env,
     server, primus, app;
@@ -17,16 +18,25 @@ server = https.createServer({
   rejectUnauthorized: false
 }, express());
 
-primus = new Primus(server, {
-  transformer: config.CFG_PRIMUS_TRANSFORMER,
-  origins: config.CFG_PRIMUS_ORIGINS
-});
-
 subscriber = new RedisSubscriber({
   port: config.CFG_REDIS_PORT,
   host: config.CFG_REDIS_HOST
 });
-application = new Application(primus, subscriber);
+
+primus = new Primus(server, {
+  subscriber: subscriber,
+  transformer: config.CFG_PRIMUS_TRANSFORMER,
+  origins: config.CFG_PRIMUS_ORIGINS,
+});
+
+primus.on('roomserror', function (error, spark) {
+  logger.error('[ Rooms Error ]', { spark: spark.id, error: error });
+});
+
+primus
+.use('emit', Emit)
+.use('rooms', Rooms)
+.use('notify', Notify);
 
 // save latest client library
 primus.save(__dirname +'/client.js');

@@ -10,6 +10,7 @@
     "primus": "~4.0.1",
     "primus-emit": "^0.1.2",
     "primus-rooms": "~3.3.0",
+    "notify": "git://github.com/mlebrun/notify.git#master",
     "redis": "~2.3.0",
     "winston": "^2.1.1"
   },
