@@ -1,13 +1,13 @@
 /*globals __dirname, console, process */
 var fs = require('fs'),
     https = require('https'),
+    debug = require('debug')('notify:ExampleApp'),
     express = require('express'),
     Primus = require('primus'),
     Emit = require('primus-emit'),
     Rooms = require('primus-rooms'),
     Notify = require('notify'),
-    RedisSubscriber = require('./lib/subscribers/RedisSubscriber'),
-    logger = require(__dirname + '/lib/logger'),
+    RedisSubscriber = require('notify-redis-subscriber'),
     config = process.env,
     server, primus, app;
 
@@ -30,7 +30,7 @@ primus = new Primus(server, {
 });
 
 primus.on('roomserror', function (error, spark) {
-  logger.error('[ Rooms Error ]', { spark: spark.id, error: error });
+  debug('[ Rooms Error ]', { spark: spark.id, error: error });
 });
 
 primus
@@ -42,20 +42,26 @@ primus
 primus.save(__dirname +'/client.js');
 
 process.on('SIGTERM', function () {
-  server.close(function () {
+  debug('[ SIGTERM ]', 'Shutting down server');
+
+  primus.end();
+
+  // clean up sparks
+  primus.forEach(function(spark, next) {
+    spark.end();
+    next();
+  }, function() {
+    primus.destroy({ timeout: 10000 });
+    // clean up subscriber
+    subscriber.quit();
     process.exit(0);
   });
-});
-
-primus.on('close', function(spark) {
-  // should clean up your subscriber
-  subscriber.quit();
 });
 
 subscriber.connect();
 subscriber.on('connected', function() {
   server.listen(config.CFG_PRIMUS_PORT, function() {
-    logger.info('[ Primus Listening ] ' + config.CFG_PRIMUS_PORT);
+    debug('[ Primus Listening ] ' + config.CFG_PRIMUS_PORT);
   });
 });
 

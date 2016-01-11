@@ -18,6 +18,5 @@ ENTRYPOINT ["/tini", "--"]
 # Run program under Tini
 CMD ["node", "."]
 
-
 # Expose the port
 EXPOSE 8080
