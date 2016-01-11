@@ -44,14 +44,13 @@ primus.save(__dirname +'/client.js');
 process.on('SIGTERM', function () {
   debug('[ SIGTERM ]', 'Shutting down server');
 
-  primus.end();
+  primus.destroy({ timeout: 10000 });
 
-  // clean up sparks
+  // clean up any leftover sparks
   primus.forEach(function(spark, next) {
     spark.end();
     next();
   }, function() {
-    primus.destroy({ timeout: 10000 });
     // clean up subscriber
     subscriber.quit();
     process.exit(0);
