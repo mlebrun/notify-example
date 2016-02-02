@@ -4,16 +4,15 @@
   "description": "A realtime notification system built on Primus, Engine.io and Redis.",
   "main": "index.js",
   "dependencies": {
+    "debug": "~2.2.0",
     "engine.io": "^1.5.4",
     "express": "~4.13.3",
-    "hiredis": "~0.4.1",
+    "pimple": "^1.0.0",
     "primus": "~4.0.1",
-    "primus-emit": "^0.1.2",
-    "primus-rooms": "~3.3.0",
     "notify": "git://github.com/mlebrun/notify.git#master",
     "notify-redis-subscriber": "git://github.com/mlebrun/notify-redis-subscriber.git#master",
-    "redis": "~2.3.0",
-    "debug": "~2.2.0"
+    "hiredis": "~0.4.1",
+    "redis": "~2.3.0"
   },
   "devDependencies": {
     "chai": "*",
